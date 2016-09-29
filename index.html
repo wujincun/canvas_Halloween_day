@@ -57,7 +57,7 @@
 <script type="text/javascript">
 
 
-    window.onload = function(e) {
+    window.onload = function() {
         var $pumpkin = $('.pumpkin');
         var ctx;
         var canvas = document.querySelector('canvas');
@@ -65,15 +65,16 @@
                 h =  document.body.clientHeight;
         var offsetX = canvas.offsetLeft,
                 offsetY = canvas.offsetTop;
-        canvas.width=w;
-        canvas.height=h;
         ctx=canvas.getContext('2d');
         layer(ctx);
         canvas.addEventListener('touchstart', circle);
         $pumpkin.on('click',function(){
             alert(1)
         });
+
         function layer(ctx) {
+            canvas.width=w;
+            canvas.height=h;
             ctx.fillStyle='transparent';
             ctx.fillRect(0, 0,w,h);
             ctx.fillStyle = 'gray';
@@ -82,10 +83,10 @@
         }
         function circle(e) {
             e.preventDefault();
+            layer(ctx)
             var $light = $('.light');
             var x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0,
                     y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
-            ctx.save();
             ctx.beginPath();
             ctx.arc(x, y, 20, 0, Math.PI * 2);
             ctx.fill();
