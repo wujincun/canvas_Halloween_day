@@ -102,8 +102,8 @@
         var $canvas = $('#canvas');
         var $bodyArea = $('.bodyArea');
 
-        var pumpkinWArr = [];
-        var pumpkinHArr = [];
+        var pumpkinArr = [];
+
 
         var x,y;
 
@@ -142,6 +142,15 @@
 
             obj.w =  Math.random()*(placeW - maxW*2) + maxW;
             obj.h =  Math.random()*(placeH - maxH*2) + maxH;
+
+            pumpkinWArr.push(obj.w);
+            pumpkinHArr.push(obj.h);
+            //[{
+            //  l:left,
+            //  t:yop,
+            //  w:width,
+            //  h:height
+            // }]
             return obj
         }
         function layer(ctx) {
@@ -174,8 +183,18 @@
                 top: y  +'px'
             })
         }
-        function getPumpkinPlace() {
-
+        inPumpkinArea()
+        function inPumpkinArea(thisX,thisY) {
+            $.each(pumpkinWArr,function(key,value){
+                if(thisX >= value.l && thisX <= value.l + value.w){
+                    return true
+                }
+            });
+            $.each(pumpkinHArr,function(key,value){
+                if(thisY >= value.t && thisY <= value.t + value.h){
+                    return true
+                }
+            })
         }
 
 
