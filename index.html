@@ -40,6 +40,13 @@
             width: 100%;
             z-index: 8;
         }
+        .allLight{
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            z-index: 20;
+
+        }
     </style>
 </head>
 
@@ -52,24 +59,46 @@
     <img class="pumpkin pumpkin4" src="img/star.png">
 </div>
 <canvas id="canvas"></canvas>
+<div class="allLight">点亮</div>
 
 <script src="jquery.js"></script>
 <script type="text/javascript">
+    /*    var pumpkinLight = {
+     _init:function () {
 
+     },
+     _render:function () {
+
+     },
+     _bind:function () {
+
+     }
+     };*/
 
     window.onload = function() {
         var $pumpkin = $('.pumpkin');
-        var ctx;
         var canvas = document.querySelector('canvas');
         var w =  document.body.clientWidth,
                 h =  document.body.clientHeight;
         var offsetX = canvas.offsetLeft,
                 offsetY = canvas.offsetTop;
-        ctx=canvas.getContext('2d');
+        var ctx=canvas.getContext('2d');
+
+        var $light = $('.light');
+        var $canvas = $('#canvas');
+
+        var x,y;
+
         layer(ctx);
+
+
         canvas.addEventListener('touchstart', circle);
-        $pumpkin.on('click',function(){
-            alert(1)
+
+
+        $('.allLight').on('touchstart',function (e) {
+            e.preventDefault();
+            $canvas.hide();
+            setTimeout(function(){$canvas.show();},1000)
         });
 
         function layer(ctx) {
@@ -83,14 +112,18 @@
         }
         function circle(e) {
             e.preventDefault();
-            layer(ctx)
-            var $light = $('.light');
-            var x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0,
-                    y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
-            ctx.beginPath();
-            ctx.arc(x, y, 20, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
+            var thisX = e.targetTouches[0].clientX,
+                    thisY = e.targetTouches[0].clientY;
+            if(thisX > x - 20 && thisX < x + 20 && thisY > y - 20 && thisY < y + 20){
+                alert(1)
+            }else{
+                layer(ctx);
+                x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0;
+                y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.fill();
+            }
             $light.css({
                 left: x +'px',
                 top: y  +'px'
