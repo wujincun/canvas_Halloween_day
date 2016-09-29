@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>演示：使用HTML5实现刮刮卡效果</title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            height:100%;
+        }
+    </style>
+</head>
+
+<body>
+<canvas id="canvas"></canvas>
+<script type="text/javascript">
+
+    var img = new Image();
+    var canvas = document.querySelector('canvas');
+    canvas.cssText = 'backgroundColor:transparent;position:absolute;';
+    img.src = 'p_1.jpg';
+
+    img.addEventListener('load', function(e) {
+        var ctx;
+        var w =  document.body.clientWidth,
+                h =  document.body.clientHeight;
+        var offsetX = canvas.offsetLeft,
+                offsetY = canvas.offsetTop;
+
+        canvas.width=w;
+        canvas.height=h;
+        canvas.style.backgroundImage='url('+img.src+')';
+        ctx=canvas.getContext('2d');
+        ctx.fillStyle='transparent';
+        ctx.fillRect(0, 0,w,h);
+        layer(ctx);
+
+        ctx.globalCompositeOperation = 'destination-out';
+
+        canvas.addEventListener('touchstart', light);
+        function layer(ctx) {
+            ctx.fillStyle = 'gray';
+            ctx.fillRect(0, 0, w, h);
+        }
+
+        function light(e) {
+            e.preventDefault();
+            var x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0,
+                    y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+    });
+
+</script>
+</body>
+</html>
