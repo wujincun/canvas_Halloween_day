@@ -102,6 +102,9 @@
         var $canvas = $('#canvas');
         var $bodyArea = $('.bodyArea');
 
+        var pumpkinWArr = [];
+        var pumpkinHArr = [];
+
         var x,y;
 
         layer(ctx);
@@ -141,7 +144,6 @@
             obj.h =  Math.random()*(placeH - maxH*2) + maxH;
             return obj
         }
-
         function layer(ctx) {
             canvas.width=w;
             canvas.height=h;
@@ -155,8 +157,10 @@
             e.preventDefault();
             var thisX = e.targetTouches[0].clientX,
                     thisY = e.targetTouches[0].clientY;
-            if(thisX > x - 20 && thisX < x + 20 && thisY > y - 20 && thisY < y + 20){
-                alert(1)
+            if(thisX > x - 10 && thisX < x + 10 && thisY > y - 10 && thisY < y + 10){//在点亮的位置上重新点击，但是半径小一半
+                if(thisX){//在南瓜的位置上点击,找到对应的南瓜
+
+                }
             }else{
                 layer(ctx);
                 x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0;
@@ -169,6 +173,9 @@
                 left: x +'px',
                 top: y  +'px'
             })
+        }
+        function getPumpkinPlace() {
+
         }
 
 
