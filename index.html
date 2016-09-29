@@ -12,18 +12,25 @@
         html,body{
             height: 100%;
         }
-
         .oprArea{
             height: 100%;
+        }
+        .bodyArea{
+            height: 90%;
             position: relative;
             background: url("img/lucky-draw.png") left center no-repeat;
+            background-size: contain;
+        }
+        .headerArea{
+            height: 10%;
+            background: url("img/lucky-draw.png") center center no-repeat;
             background-size: contain;
         }
         .pumpkin{
             position: absolute;
             z-index: 5;
-            left:100px;
-            top:100px;
+            width: 20px;
+            height: 20px;
         }
         .light{
             position: absolute;
@@ -33,6 +40,7 @@
             top: 50%;
         }
         #canvas{
+            display: none;
             position: absolute;
             left: 0;
             top: 0;
@@ -52,14 +60,20 @@
 
 <body>
 <div class="oprArea">
-    <img class="light" src="img/share.png" alt="">
-    <img class="pumpkin pumpkin1" src="img/star.png">
-    <img class="pumpkin pumpkin2" src="img/star.png">
-    <img class="pumpkin pumpkin3" src="img/star.png">
-    <img class="pumpkin pumpkin4" src="img/star.png">
+    <div class="headerArea">
+        <div class="cutTime">15</div>
+        <div class="allLight">点亮</div>
+    </div>
+    <div class="bodyArea">
+        <img class="light" src="img/share.png" alt="">
+        <img class="pumpkin pumpkin1" src="img/star.png">
+        <img class="pumpkin pumpkin2" src="img/star.png">
+        <img class="pumpkin pumpkin3" src="img/star.png">
+        <img class="pumpkin pumpkin4" src="img/star.png">
+    </div>
 </div>
 <canvas id="canvas"></canvas>
-<div class="allLight">点亮</div>
+
 
 <script src="jquery.js"></script>
 <script type="text/javascript">
@@ -86,20 +100,47 @@
 
         var $light = $('.light');
         var $canvas = $('#canvas');
+        var $bodyArea = $('.bodyArea');
 
         var x,y;
 
         layer(ctx);
-
+        placePumpkin();
 
         canvas.addEventListener('touchstart', circle);
-
-
+        
         $('.allLight').on('touchstart',function (e) {
             e.preventDefault();
             $canvas.hide();
             setTimeout(function(){$canvas.show();},1000)
         });
+        
+        function placePumpkin() {
+            $pumpkin.each(function (key,value) {
+                var place = getRandomPlace();
+                $(value).css({
+                    'left':place.w,
+                    'top':place.h
+                })
+            })
+        }
+        function getRandomPlace() {
+            var obj = {};
+            var placeW = $bodyArea.width();
+            var placeH = $bodyArea.height();
+            var arrW = [];
+            var arrH = [];
+            $pumpkin.each(function (key,value) {
+                arrW.push($(value).width());
+                arrH.push($(value).height())
+            });
+            var maxW = Math.max.apply(null,arrW);
+            var maxH = Math.max.apply(null,arrH);
+
+            obj.w =  Math.random()*(placeW - maxW*2) + maxW;
+            obj.h =  Math.random()*(placeH - maxH*2) + maxH;
+            return obj
+        }
 
         function layer(ctx) {
             canvas.width=w;
@@ -129,10 +170,8 @@
                 top: y  +'px'
             })
         }
-        function light(e) {
-            e.preventDefault();
 
-        }
+
     };
 
 </script>
