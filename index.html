@@ -107,7 +107,6 @@
 
         var pumpkinArr = [];
 
-
         var x,y;
 
         layer(ctx);
@@ -129,33 +128,6 @@
                     'top':place.h
                 })
             })
-        }
-        function getRandomPlace() {
-            var obj = {};
-            var placeW = $bodyArea.width();
-            var placeH = $bodyArea.height();
-            var arrW = [];
-            var arrH = [];
-            $pumpkin.each(function (key,value) {
-                arrW.push($(value).width());
-                arrH.push($(value).height())
-            });
-            var maxW = Math.max.apply(null,arrW);
-            var maxH = Math.max.apply(null,arrH);
-
-            obj.w =  Math.random()*(placeW - maxW*2) + maxW;
-            obj.h =  Math.random()*(placeH - maxH*2) + maxH;
-
-            pumpkinWArr.push(obj.w);
-            pumpkinHArr.push(obj.h);
-            //[{
-            //  l:left,
-            //  t:yop,
-            //  w:width,
-            //  h:height,
-            //  c:className
-            // }]
-            return obj
         }
         function layer(ctx) {
             canvas.width=w;
@@ -189,6 +161,34 @@
             })
         }
 
+
+        function getRandomPlace() {
+            var obj = {};
+            var placeW = $bodyArea.width();
+            var placeH = $bodyArea.height();
+            var arrW = [];
+            var arrH = [];
+            $pumpkin.each(function (key,value) {
+                arrW.push($(value).width());
+                arrH.push($(value).height())
+            });
+            var maxW = Math.max.apply(null,arrW);
+            var maxH = Math.max.apply(null,arrH);
+
+            obj.w =  Math.random()*(placeW - maxW*2) + maxW;
+            obj.h =  Math.random()*(placeH - maxH*2) + maxH;
+
+            pumpkinWArr.push(obj.w);
+            pumpkinHArr.push(obj.h);
+            //[{
+            //  l:left,
+            //  t:yop,
+            //  w:width,
+            //  h:height,
+            //  c:className
+            // }]
+            return obj
+        }
         function inPumpkinArea(thisX,thisY) {
 
             //return  挑出对应南瓜的{
