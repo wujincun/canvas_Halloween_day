@@ -32,6 +32,9 @@
             width: 20px;
             height: 20px;
         }
+        .pumpkin.bright{
+            background-color: red;
+        }
         .light{
             position: absolute;
             z-index: 10;
@@ -149,7 +152,8 @@
             //  l:left,
             //  t:yop,
             //  w:width,
-            //  h:height
+            //  h:height,
+            //  c:className
             // }]
             return obj
         }
@@ -167,8 +171,9 @@
             var thisX = e.targetTouches[0].clientX,
                     thisY = e.targetTouches[0].clientY;
             if(thisX > x - 10 && thisX < x + 10 && thisY > y - 10 && thisY < y + 10){//在点亮的位置上重新点击，但是半径小一半
-                if(thisX){//在南瓜的位置上点击,找到对应的南瓜
-
+                var chooseP = inPumpkinArea(thisX,thisY);
+                if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
+                    $('.'+chooseP.c).addClass('bright');
                 }
             }else{
                 layer(ctx);
@@ -183,8 +188,16 @@
                 top: y  +'px'
             })
         }
-        inPumpkinArea()
+
         function inPumpkinArea(thisX,thisY) {
+
+            //return  挑出对应南瓜的{
+            // l:left,
+            //  t:yop,
+            //  w:width,
+            //  h:height,
+            //  className:className
+            // }
             $.each(pumpkinWArr,function(key,value){
                 if(thisX >= value.l && thisX <= value.l + value.w){
                     return true
