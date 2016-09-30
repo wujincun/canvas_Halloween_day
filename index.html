@@ -47,8 +47,6 @@
             background: url("img/bodyArea.jpg") left center no-repeat;
             background-size: 100% 100%;
         }
-
-
         .pumpkin{
             position: absolute;
             z-index: 5;
@@ -179,10 +177,11 @@
                 var chooseP = inPumpkinArea(thisX,thisY);
                 if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
                     $('.'+chooseP.c).addClass('bright');
-                    num ++
-                }
-                if(num >= $pumpkin.length){
-                    alert(1)
+                    num ++;
+                    if(num >= $pumpkin.length){
+                        $canvas.hide();
+                        alert(1)
+                    }
                 }
             }else{
                 //layer(ctx);//若每次点击点亮区域重新变暗，则去掉注释

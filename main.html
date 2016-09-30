@@ -2,28 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <title>Title</title>
-    <style>
-        .mainArea{
-
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 <div class="mainArea">
-    <div class="startArea">
+    <div class="progressBarArea part"> <!--条形背景-->
+        <div class="bar"></div>     <!--上小房子位置-->
+    </div>
+    <div class="startArea part">
         <img class="startPumpkin" src="img/startPumpkin.png"/>
         <img class="lightPumpkin" src="img/lightPumpkin.png"/>
     </div>
-    <div class="descriptionArea">
-        <div class="desc"></div>
-        <img class="box" src="img/box.png"/>
+    <div class="descriptionArea part">
+        <div class="descArea">万圣节已经到来<br>一大波捣蛋鬼已经苏醒<br>为了讨要万圣节糖果他们把你的iphone6<br>藏了起来！<br>快去点亮南瓜灯，找到他们！<br>拿回被抢走的iphones<br>当万圣节结束就再也无法拿回你的宝藏了！</div>
         <div class="ruleArea">
             <img class="rule" src="img/rule.png"/>
             <img class="goBtn" src="img/goBtn.png">
         </div>
+        <div class="boxArea">
+            <img class="boxClose box" src="img/box.png"/>
+            <img class="boxOpen box" src="img/boxOpen.png"/>
+        </div>
     </div>
 </div>
+<script src="jquery.js"></script>
+<script>
+   $('.lightPumpkin').on('click',function () {
+       $('.startArea').hide();
+       $('.descriptionArea').show();
+       $('.descArea').slideDown(2000);
+       setTimeout(function(){
+           $('.boxClose').hide();
+           $('.boxOpen').show()
+       },2000);
+       setTimeout(function(){
+           $('.descArea').hide();
+           $('.ruleArea').show()
+       },3000)
+   });
+    $('.goBtn').on('click',function () {
 
+    })
+</script>
 </body>
 </html>
