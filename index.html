@@ -16,25 +16,48 @@
             height: 100%;
             overflow: hidden;
         }
+        .headerArea{
+            height: 10%;
+            background: url("img/headerArea.jpg") center center no-repeat;
+            background-size: 100% 100%;
+        }
+        .cutTime{
+            position: absolute;
+            height: 6%;
+            width: 15%;
+            left: 0;
+            top:0;
+            z-index: 15;
+            background: url("img/cutTime.png") center center no-repeat;
+            background-size: contain;
+        }
+        .help{
+            position: absolute;
+            height: 6%;
+            width: 17%;
+            right: 0;
+            top:0;
+            z-index: 15;
+            background: url("img/help.png") center center no-repeat;
+            background-size: contain;
+        }
         .bodyArea{
             height: 90%;
             position: relative;
-            background: url("img/lucky-draw.png") left center no-repeat;
-            background-size: contain;
+            background: url("img/bodyArea.jpg") left center no-repeat;
+            background-size: 100% 100%;
         }
-        .headerArea{
-            height: 10%;
-            background: url("img/lucky-draw.png") center center no-repeat;
-            background-size: contain;
-        }
+
+
         .pumpkin{
             position: absolute;
             z-index: 5;
-            width: 20px;
-            height: 20px;
+            background: url("img/pumpkin.png") left center no-repeat;
+            background-size: 100% 100%;
         }
         .pumpkin.bright{
-            background-color: red;
+            background: url("img/pumpkinLight.png") left center no-repeat;
+            background-size: 100% 100%;
         }
         .light{
             position: absolute;
@@ -59,13 +82,6 @@
             width: 100%;
             z-index: 8;
         }
-        .allLight{
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            z-index: 20;
-
-        }
     </style>
 </head>
 
@@ -73,14 +89,15 @@
 <div class="oprArea">
     <div class="headerArea">
         <div class="cutTime">15</div>
-        <div class="allLight">点亮</div>
+        <div class="help"></div>
     </div>
     <div class="bodyArea">
         <img class="light" src="img/light.png" alt="">
-        <img class="pumpkin pumpkin1" src="img/star.png">
-        <img class="pumpkin pumpkin2" src="img/star.png">
-        <img class="pumpkin pumpkin3" src="img/star.png">
-        <img class="pumpkin pumpkin4" src="img/star.png">
+        <div class="pumpkin pumpkin1"  style="width: 10%;height: 6%;"></div>
+        <div class="pumpkin pumpkin2"  style="width: 15%;height: 9%;"></div>
+        <div class="pumpkin pumpkin3"  style="width: 10%;height: 6%;"></div>
+        <div class="pumpkin pumpkin4"  style="width: 10%;height: 6%;"></div>
+        <div class="pumpkin pumpkin5"  style="width: 15%;height: 9%;"></div>
     </div>
 </div>
 <canvas id="canvas"></canvas>
@@ -117,6 +134,7 @@
 
 
         var pumpkinArr = [];
+        var num = 0;
 
         var x,y;
         canvas.width=w;
@@ -128,7 +146,7 @@
 
         canvas.addEventListener('touchstart', circle);
         
-        $('.allLight').on('touchstart',function (e) {
+        $('.help').on('touchstart',function (e) {
             e.preventDefault();
             $canvas.hide();
             setTimeout(function(){$canvas.show();},1000)
@@ -139,7 +157,7 @@
             canvas.height=h;
             ctx.fillStyle='transparent';
             ctx.fillRect(0, 0,w,h);
-            ctx.fillStyle = 'gray';
+            ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, w, h);
             ctx.globalCompositeOperation = 'destination-out';
         }
@@ -151,9 +169,13 @@
                 var chooseP = inPumpkinArea(thisX,thisY);
                 if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
                     $('.'+chooseP.c).addClass('bright');
+                    num ++
+                }
+                if(num >= $pumpkin.length){
+                    alert(1)
                 }
             }else{
-                //layer(ctx);
+                //layer(ctx);//若每次点击点亮区域重新变暗，则去掉注释
                 x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0;
                 y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
                 ctx.beginPath();
@@ -164,6 +186,7 @@
                 left: x - $light.width()/2  + 'px',
                 top: y  - $light.width()/2 - headerAreaH + 'px'
             })
+
         }
         function getRandomPlace() {
             var placeW = $bodyArea.width();
