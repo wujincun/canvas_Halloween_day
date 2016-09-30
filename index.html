@@ -14,6 +14,7 @@
         }
         .oprArea{
             height: 100%;
+            overflow: hidden;
         }
         .bodyArea{
             height: 90%;
@@ -41,9 +42,16 @@
             pointer-events: none;
             left: 50%;
             top: 50%;
+            width: 11.55%;
+            height: 7.7%;
+            border-radius: 50%;
+            overflow: hidden;
+            background: -webkit-radial-gradient(#fff,#000);
+            background: -moz-radial-gradient(#fff,#000);
+            background: radial-gradient(rgba(255,255,255,.3),rgba(0,0,0,1));
         }
         #canvas{
-            display: none;
+            /*display: none;*/
             position: absolute;
             left: 0;
             top: 0;
@@ -68,7 +76,7 @@
         <div class="allLight">点亮</div>
     </div>
     <div class="bodyArea">
-        <img class="light" src="img/share.png" alt="">
+        <img class="light" src="img/light.png" alt="">
         <img class="pumpkin pumpkin1" src="img/star.png">
         <img class="pumpkin pumpkin2" src="img/star.png">
         <img class="pumpkin pumpkin3" src="img/star.png">
@@ -81,6 +89,7 @@
 <script src="jquery.js"></script>
 <script type="text/javascript">
     /*    var pumpkinLight = {
+
      _init:function () {
 
      },
@@ -103,14 +112,19 @@
 
         var $light = $('.light');
         var $canvas = $('#canvas');
+        var headerAreaH = $('.headerArea').height();
         var $bodyArea = $('.bodyArea');
+
 
         var pumpkinArr = [];
 
         var x,y;
-
+        canvas.width=w;
+        canvas.height=h;
+        ctx.fillStyle='transparent';
+        ctx.fillRect(0, 0,w,h);
         layer(ctx);
-        placePumpkin();
+        getRandomPlace();
 
         canvas.addEventListener('touchstart', circle);
         
@@ -119,16 +133,7 @@
             $canvas.hide();
             setTimeout(function(){$canvas.show();},1000)
         });
-        
-        function placePumpkin() {
-            $pumpkin.each(function (key,value) {
-                var place = getRandomPlace();
-                $(value).css({
-                    'left':place.w,
-                    'top':place.h
-                })
-            })
-        }
+
         function layer(ctx) {
             canvas.width=w;
             canvas.height=h;
@@ -148,7 +153,7 @@
                     $('.'+chooseP.c).addClass('bright');
                 }
             }else{
-                layer(ctx);
+                //layer(ctx);
                 x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0;
                 y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
                 ctx.beginPath();
@@ -156,61 +161,38 @@
                 ctx.fill();
             }
             $light.css({
-                left: x +'px',
-                top: y  +'px'
+                left: x - $light.width()/2  + 'px',
+                top: y  - $light.width()/2 - headerAreaH + 'px'
             })
         }
-
-
         function getRandomPlace() {
-            var obj = {};
             var placeW = $bodyArea.width();
             var placeH = $bodyArea.height();
-            var arrW = [];
-            var arrH = [];
             $pumpkin.each(function (key,value) {
-                arrW.push($(value).width());
-                arrH.push($(value).height())
+                var obj = {};
+                obj.w = $(value).width();
+                obj.h = $(value).height();
+                obj.l = Math.floor(Math.random()*(placeW - obj.w*2)) + obj.w;
+                obj.t = Math.floor(Math.random()*(placeH - obj.h*2)) + obj.h;
+                obj.c = $(value).attr('class').replace(/pumpkin/,'').trim();
+                $(value).css({
+                    left: obj.l +'px',
+                    top: obj.t  +'px'
+                });
+                pumpkinArr.push(obj);
             });
-            var maxW = Math.max.apply(null,arrW);
-            var maxH = Math.max.apply(null,arrH);
-
-            obj.w =  Math.random()*(placeW - maxW*2) + maxW;
-            obj.h =  Math.random()*(placeH - maxH*2) + maxH;
-
-            pumpkinWArr.push(obj.w);
-            pumpkinHArr.push(obj.h);
-            //[{
-            //  l:left,
-            //  t:yop,
-            //  w:width,
-            //  h:height,
-            //  c:className
-            // }]
-            return obj
+            return pumpkinArr
         }
         function inPumpkinArea(thisX,thisY) {
-
-            //return  挑出对应南瓜的{
-            // l:left,
-            //  t:yop,
-            //  w:width,
-            //  h:height,
-            //  className:className
-            // }
-            $.each(pumpkinWArr,function(key,value){
-                if(thisX >= value.l && thisX <= value.l + value.w){
-                    return true
+            var chooseValue;
+            $.each(pumpkinArr,function(key,value){
+                if(thisX >= value.l && thisX <= value.l + value.w && thisY - headerAreaH >= value.t && thisY - headerAreaH <= value.t + value.h){
+                    chooseValue = value;
+                    return false;
                 }
             });
-            $.each(pumpkinHArr,function(key,value){
-                if(thisY >= value.t && thisY <= value.t + value.h){
-                    return true
-                }
-            })
+            return chooseValue
         }
-
-
     };
 
 </script>
