@@ -156,6 +156,7 @@
         var pumpkinArr = [];
         var num = 0;
         var r = 20;//火柴点亮半径；
+        var timer;
 
         var x,y;
         canvas.width=w;
@@ -169,6 +170,8 @@
             step:1,
             ele:$('.cutTimeNum'),
             handler4ToTime:function(){
+                $canvas.hide().off();
+                $light.off();
                 alert('daole')
             }
         });
@@ -205,6 +208,7 @@
                     if(num >= $pumpkin.length){
                         $canvas.hide();
                         $help.off();
+                        clearTimeout(timer);
                         alert(1)
                     }
                 }
@@ -250,7 +254,6 @@
             });
             return chooseValue
         }
-        var timer;
         function countTime(cfg){
             timer = setInterval(cutTime,cfg.step*1000);
             function cutTime(){
