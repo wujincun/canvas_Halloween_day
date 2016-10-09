@@ -143,19 +143,17 @@ var pumpkinLight = {
         pumpkinArr:[],
         num:0,
         timer:null,
-        r:20,//火柴点亮半径；
-        x:0,
-        y:0
+        r:20//火柴点亮半径；
     },
     _init:function () {
         this._initCons.canvas.width = this._initCons.w;
         this._initCons.canvas.height = this._initCons.h;
         this._initCons.ctx.fillStyle = 'transparent';
         this._initCons.ctx.fillRect(0, 0,this._initCons.w,this._initCons.h);
-        this.render();
-        this.bind();
+        this._render();
+        this._bind();
     },
-     render:function () {
+    _render:function () {
          var _this = this;
          _this.layer(_this._initCons.ctx);//canvas的蒙层
          _this.getRandomPlace();//随机摆放南瓜
@@ -166,19 +164,51 @@ var pumpkinLight = {
              handler4ToTime:function(){
                  _this._initCons.$canvas.hide().off();
                  _this._initCons.$light.off();
-                 alert('daole')
+                 //alert('daole')
              }
          });//倒计时
      },
-     bind:function () {
-         var _this = this;
-         _this._initCons.$help.on('touchstart',function (e) {
-             e.preventDefault();
-             _this._initCons.$canvas.hide();
-             setTimeout(function(){_this._initCons.$canvas.show();},1000)
-         });//照亮按钮
-         _this._initCons.canvas.addEventListener('touchstart', _this.circle,false);//点击--火柴照亮
-     },
+    _bind:function () {
+       var _this = this;
+       var x,y;
+       _this._initCons.$help.on('touchstart',function (e) {
+         e.preventDefault();
+         _this._initCons.$canvas.hide();
+         setTimeout(function(){_this._initCons.$canvas.show();},1000)
+     });//照亮按钮
+       _this._initCons.$canvas.on('touchstart',function(e){
+         e.preventDefault();
+         var thisX = event.targetTouches[0].clientX,
+                 thisY = event.targetTouches[0].clientY;
+         var r = _this._initCons.r;
+         var ctx = _this._initCons.ctx;
+         if(thisX > x - r/2 && thisX < x + r/2 && thisY > y - r/2 && thisY < y + r/2){//在点亮的位置上重新点击，但是半径小一半
+             var chooseP = _this.inPumpkinArea(thisX,thisY);
+             if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
+                 $('.'+chooseP.c).addClass('bright');
+                 _this._initCons.num ++;
+                 if(_this._initCons.num >= _this._initCons.$pumpkin.length){
+                     _this._initCons.$canvas.hide();
+                     _this._initCons.$help.off();
+                     clearTimeout(_this._initCons.timer);
+                     alert(1)
+                 }
+             }
+         }else{
+             //layer(ctx);//若每次点击点亮区域重新变暗，则去掉注释
+             x = (thisX + document.body.scrollLeft || e.pageX) - _this._initCons.offsetX || 0;
+             y = (thisY + document.body.scrollTop || e.pageY) - _this._initCons.offsetY || 0;
+             ctx.beginPath();
+             ctx.arc(x, y, r, 0, Math.PI * 2);
+             ctx.fill();
+         }
+         _this._initCons.$light.css({
+             left: x - _this._initCons.$light.width()/2  + 'px',
+             top: y  - _this._initCons.$light.width()/2 - _this._initCons.headerAreaH + 'px'
+         })
+     });//点击--火柴照亮    主逻辑
+    },
+
     layer:function (ctx) {
         var _this = this;
         var ctx =  _this._initCons.ctx;
@@ -192,41 +222,7 @@ var pumpkinLight = {
         ctx.beginPath();
         ctx.arc(_this._initCons.w/2, _this._initCons.h/2, _this._initCons.r, 0, Math.PI * 2);
         ctx.fill();
-    },
-    circle:function (e) {
-        var _this = this;
-        e.preventDefault();
-        var thisX = e.targetTouches[0].clientX,
-                thisY = e.targetTouches[0].clientY;
-        var x = _this._initCons.x;
-        var y = _this._initCons.y;
-        var r = _this._initCons.r;
-        if(thisX > x - r/2 && thisX < x + r/2 && thisY > y - r/2 && thisY < y + r/2){//在点亮的位置上重新点击，但是半径小一半
-            var chooseP = _this.inPumpkinArea(thisX,thisY);
-            if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
-                $('.'+chooseP.c).addClass('bright');
-                _this._initCons.num ++;
-                if(_this._initCons.num >= _this._initCons.$pumpkin.length){
-                    _this._initCons.$canvas.hide();
-                    _this._initCons.$help.off();
-                    clearTimeout(_this._initCons.timer);
-                    alert(1)
-                }
-            }
-        }else{
-            //layer(ctx);//若每次点击点亮区域重新变暗，则去掉注释
-            x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - _this._initCons.offsetX || 0;
-            y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - _this._initCons.offsetY || 0;
-            ctx.beginPath();
-            ctx.arc(x, y, r, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        $light.css({
-            left: x - _this._initCons.$light.width()/2  + 'px',
-            top: y  - _this._initCons.$light.width()/2 - _this._initCons.headerAreaH + 'px'
-        })
-
-    },
+    },//黑暗区域的蒙层，canvas，由黑和透明两层组成
     getRandomPlace:function () {
         var _this = this;
         var placeW = _this._initCons.$bodyArea.width();
@@ -245,19 +241,22 @@ var pumpkinLight = {
             _this._initCons.pumpkinArr.push(obj);
         });
         return _this._initCons.pumpkinArr
-    },
+    },//获取随机位置，并将南瓜的信息全存起来
     inPumpkinArea:function (thisX,thisY) {
+        var _this = this;
+        var headerAreaH = _this._initCons.headerAreaH;
         var chooseValue;
-        $.each(pumpkinArr,function(key,value){
+        $.each(_this._initCons.pumpkinArr,function(key,value){
             if(thisX >= value.l && thisX <= value.l + value.w && thisY - headerAreaH >= value.t && thisY - headerAreaH <= value.t + value.h){
                 chooseValue = value;
                 return false;
             }
         });
         return chooseValue
-    },
+    },//判断是不是点击的区域在南瓜上
     countTime:function (cfg){
-        timer = setInterval(cutTime,cfg.step*1000);
+        var _this = this;
+        _this._initCons.timer = setInterval(cutTime,cfg.step*1000);
         function cutTime(){
             if(cfg.duration <= 0.01){
                 cfg.ele.text(0);
@@ -268,7 +267,7 @@ var pumpkinLight = {
                 cfg.ele.text(cfg.duration)
             }
         }
-    }
+    }//倒计时
 };
 pumpkinLight._init();
 
