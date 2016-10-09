@@ -61,8 +61,8 @@
             position: absolute;
             z-index: 10;
             pointer-events: none;
-            left: 50%;
-            top: 50%;
+            left: 44.1%;
+            top: 40.5%;
             width: 11.55%;
             height: 7.7%;
             border-radius: 50%;
@@ -144,6 +144,7 @@
 
         var pumpkinArr = [];
         var num = 0;
+        var r = 20;//火柴点亮半径；
 
         var x,y;
         canvas.width=w;
@@ -169,12 +170,15 @@
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, w, h);
             ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(w/2, h/2, r, 0, Math.PI * 2);
+            ctx.fill();
         }
         function circle(e) {
             e.preventDefault();
             var thisX = e.targetTouches[0].clientX,
                     thisY = e.targetTouches[0].clientY;
-            if(thisX > x - 10 && thisX < x + 10 && thisY > y - 10 && thisY < y + 10){//在点亮的位置上重新点击，但是半径小一半
+            if(thisX > x - r/2 && thisX < x + r/2 && thisY > y - r/2 && thisY < y + r/2){//在点亮的位置上重新点击，但是半径小一半
                 var chooseP = inPumpkinArea(thisX,thisY);
                 if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
                     $('.'+chooseP.c).addClass('bright');
@@ -190,7 +194,7 @@
                 x = (e.targetTouches[0].clientX + document.body.scrollLeft || e.pageX) - offsetX || 0;
                 y = (e.targetTouches[0].clientY + document.body.scrollTop || e.pageY) - offsetY || 0;
                 ctx.beginPath();
-                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.arc(x, y, r, 0, Math.PI * 2);
                 ctx.fill();
             }
             $light.css({
