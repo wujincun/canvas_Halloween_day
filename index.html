@@ -189,7 +189,7 @@ var pumpkinLight = {
                  if(num >= _this._initCons.$pumpkin.length){
                      _this._initCons.$canvas.hide();
                      _this._initCons.$help.off();
-                     clearTimeout(_this._initCons.timer);
+                     clearInterval(_this._initCons.timer);
                      alert(1)
                  }
              }
@@ -259,7 +259,7 @@ var pumpkinLight = {
         function cutTime(){
             if(cfg.duration <= 0.01){
                 cfg.ele.text(0);
-                clearInterval(timer);
+                clearInterval(_this._initCons.timer);
                 cfg.handler4ToTime();
             }else{
                 cfg.duration = cfg.duration - cfg.step;
