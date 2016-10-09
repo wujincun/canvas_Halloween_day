@@ -31,6 +31,17 @@
             background: url("img/cutTime.png") center center no-repeat;
             background-size: contain;
         }
+        .cutTime .cutTimeNum{
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 20;
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+            line-height: 1.75;
+        }
         .help{
             position: absolute;
             height: 6%;
@@ -86,7 +97,7 @@
 <body>
 <div class="oprArea">
     <div class="headerArea">
-        <div class="cutTime">15</div>
+        <div class="cutTime"><span class="cutTimeNum">15</span></div>
         <div class="help"></div>
     </div>
     <div class="bodyArea">
@@ -153,6 +164,14 @@
         ctx.fillRect(0, 0,w,h);
         layer(ctx);
         getRandomPlace();
+        countTime({
+            duration:15,
+            step:1,
+            ele:$('.cutTimeNum'),
+            handler4ToTime:function(){
+                alert('daole')
+            }
+        });
 
         canvas.addEventListener('touchstart', circle);
 
@@ -230,6 +249,20 @@
                 }
             });
             return chooseValue
+        }
+        var timer;
+        function countTime(cfg){
+            timer = setInterval(cutTime,cfg.step*1000);
+            function cutTime(){
+                if(cfg.duration <= 0.01){
+                    cfg.ele.text(0);
+                    clearInterval(timer);
+                    cfg.handler4ToTime();
+                }else{
+                    cfg.duration = cfg.duration - cfg.step;
+                    cfg.ele.text(cfg.duration)
+                }
+            }
         }
     };
 
