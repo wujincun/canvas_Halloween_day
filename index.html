@@ -141,7 +141,6 @@ var pumpkinLight = {
         $help:$('.help'),
 
         pumpkinArr:[],
-        num:0,
         timer:null,
         r:20//火柴点亮半径；
     },
@@ -186,8 +185,8 @@ var pumpkinLight = {
              var chooseP = _this.inPumpkinArea(thisX,thisY);
              if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
                  $('.'+chooseP.c).addClass('bright');
-                 _this._initCons.num ++;
-                 if(_this._initCons.num >= _this._initCons.$pumpkin.length){
+                 var num = $('.bright').length;
+                 if(num >= _this._initCons.$pumpkin.length){
                      _this._initCons.$canvas.hide();
                      _this._initCons.$help.off();
                      clearTimeout(_this._initCons.timer);
@@ -337,7 +336,7 @@ pumpkinLight._init();
                 var chooseP = inPumpkinArea(thisX,thisY);
                 if(chooseP){//在南瓜的位置上点击,找到对应的南瓜
                     $('.'+chooseP.c).addClass('bright');
-                    num ++;
+                    var num = $('.bright').length;
                     if(num >= $pumpkin.length){
                         $canvas.hide();
                         $help.off();

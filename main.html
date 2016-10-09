@@ -29,7 +29,56 @@
 </div>
 <script src="jquery.js"></script>
 <script>
-    $(function(){
+    var pumpkinMain = {
+        _init:function () {
+            this._render();
+            this._bind();
+        },
+        _render:function () {
+            var $bar = $('.bar');
+            var $imgs =  $('img');
+            var imgNum = $imgs.length;
+            var processL = 88;
+            var interval = Number(processL/imgNum);
+            var toLeft = 0;
+            $imgs.each(function(key,value){
+                $(value).on('load',function(){
+                    toLeft = interval * (key +1);
+                    $bar.animate({
+                        'left': toLeft + '%'
+                    },500);
+                    if(toLeft >= 88){
+                        $bar.animate({
+                            'left': toLeft + '%'
+                        },500,function () {
+                            $('.progressBarArea').hide();
+                            $('.startArea').show()
+                        });
+                    }
+                })
+            });
+        },
+        _bind:function () {
+            $('.lightPumpkin').on('click',function () {
+                $('.startArea').hide();
+                $('.descriptionArea').show();
+                $('.descArea').slideDown(2000);
+                setTimeout(function(){
+                    $('.boxClose').hide();
+                    $('.boxOpen').show()
+                },2000);
+                setTimeout(function(){
+                    $('.descArea').hide();
+                    $('.ruleArea').show()
+                },3000)
+            });
+            $('.goBtn').on('click',function () {
+                window.location.href="./index.html"
+            })
+        }
+    };
+    pumpkinMain._init();
+    /*$(function(){
         var $imgs =  $('img');
         var $bar = $('.bar');
         var imgNum = $imgs.length;
@@ -68,7 +117,7 @@
         $('.goBtn').on('click',function () {
             window.location.href="./index.html"
         })
-    })
+    })*/
 
 </script>
 </body>
