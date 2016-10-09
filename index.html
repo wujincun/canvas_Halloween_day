@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>演示：使用HTML5实现刮刮卡效果</title>
+    <title>halloween</title>
     <style type="text/css">
         *{
             margin:0;
@@ -139,6 +139,7 @@
         var $canvas = $('#canvas');
         var headerAreaH = $('.headerArea').height();
         var $bodyArea = $('.bodyArea');
+        var $help = $('.help');
 
 
         var pumpkinArr = [];
@@ -153,8 +154,8 @@
         getRandomPlace();
 
         canvas.addEventListener('touchstart', circle);
-        
-        $('.help').on('touchstart',function (e) {
+
+        $help.on('touchstart',function (e) {
             e.preventDefault();
             $canvas.hide();
             setTimeout(function(){$canvas.show();},1000)
@@ -180,6 +181,7 @@
                     num ++;
                     if(num >= $pumpkin.length){
                         $canvas.hide();
+                        $help.off();
                         alert(1)
                     }
                 }
