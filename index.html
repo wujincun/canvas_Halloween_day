@@ -145,10 +145,10 @@ var pumpkinLight = {
         r:20//火柴点亮半径；
     },
     _init:function () {
-        this._initCons.canvas.width = this._initCons.w;
-        this._initCons.canvas.height = this._initCons.h;
-        this._initCons.ctx.fillStyle = 'transparent';
-        this._initCons.ctx.fillRect(0, 0,this._initCons.w,this._initCons.h);
+        //this._initCons.canvas.width = this._initCons.w;
+        //this._initCons.canvas.height = this._initCons.h;
+       // this._initCons.ctx.fillStyle = 'transparent';
+        //this._initCons.ctx.fillRect(0, 0,this._initCons.w,this._initCons.h);
         this._render();
         this._bind();
     },
@@ -163,7 +163,7 @@ var pumpkinLight = {
              handler4ToTime:function(){
                  _this._initCons.$canvas.hide().off();
                  _this._initCons.$light.off();
-                 //alert('daole')
+                 alert('fail')
              }
          });//倒计时
      },
@@ -190,7 +190,7 @@ var pumpkinLight = {
                      _this._initCons.$canvas.hide();
                      _this._initCons.$help.off();
                      clearInterval(_this._initCons.timer);
-                     alert(1)
+                     alert('success')
                  }
              }
          }else{
