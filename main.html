@@ -41,12 +41,12 @@
             var processL = 88;
             var interval = Number(processL/imgNum);
             var toLeft = 0;
+            var num = 0;
             $imgs.each(function(key,value){
                 $(value).on('load',function(){
-                    toLeft = interval * (key +1);
-                    $bar.animate({
-                        'left': toLeft + '%'
-                    },500);
+                    if( key > num ){ num = key }//key 从0开始，但是img个数从1开始
+                    toLeft = interval * (num + 1);//不应该是key，而应该是num第几个，key的话因为可以加载完第3个，然后第一个，导致进度条会后退
+
                     if(toLeft >= 88){
                         $bar.animate({
                             'left': toLeft + '%'
@@ -54,6 +54,10 @@
                             $('.progressBarArea').hide();
                             $('.startArea').show()
                         });
+                    }else{
+                        $bar.animate({
+                            'left': toLeft + '%'
+                        },500);
                     }
                 })
             });
